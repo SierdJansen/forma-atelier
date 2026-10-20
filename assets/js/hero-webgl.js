@@ -15,12 +15,31 @@ function init(){
  vec3 rot(vec3 p){p=rz(ry(rx(p,uRotation.x),uRotation.y),uRotation.z);return ry(rx(p,uView.x),uView.y);}
  void main(){vec3 p=rot(aPosition*uScale);vN=rot(aNormal);p.z-=8.;vV=-p;float n=.1,f=50.;gl_Position=vec4(p.x*2.41421356/uAspect,p.y*2.41421356,(-(f+n)*p.z-2.*f*n)/(f-n),-p.z);}`);
  const fs=shader(gl.FRAGMENT_SHADER,`precision mediump float;varying mediump vec3 vN,vV;uniform vec3 uGold;
+ const float PI=3.14159265;
  vec3 tone(vec3 c){return clamp((c*(2.51*c+.03))/(c*(2.43*c+.59)+.14),0.,1.);}
- void main(){vec3 N=normalize(vN),V=normalize(vV),R=reflect(-V,N);float nv=max(dot(N,V),0.);vec3 F=uGold+(1.-uGold)*pow(1.-nv,5.);
- float strip1=pow(max(0.,dot(R,normalize(vec3(-.5,1.,1.)))),35.);float strip2=pow(max(0.,dot(R,normalize(vec3(1.,.2,.8)))),65.);
- float broad=pow(max(0.,dot(R,normalize(vec3(-1.,.4,-.4)))),5.);float band=pow(max(0.,1.-abs(R.y-.45)),22.);
- vec3 env=vec3(.035,.045,.055)+vec3(.45,.5,.62)*max(R.y,0.)+vec3(2.5,2.25,1.8)*strip1+vec3(2.8,3.,3.4)*strip2+vec3(.35,.25,.12)*broad+vec3(.45)*band;
- float diffuse=.06+.12*max(dot(N,normalize(vec3(-.4,.8,1.))),0.);vec3 col=F*env+uGold*diffuse;col=tone(col);col=pow(col,vec3(1./2.2));gl_FragColor=vec4(col,1.);}`);
+ vec3 fresnel(float hv,vec3 f0){return f0+(1.-f0)*pow(1.-clamp(hv,0.,1.),5.);}
+ float geometry(float n,float k){return n/max(n*(1.-k)+k,.001);}
+ vec3 specular(vec3 N,vec3 V,vec3 L,vec3 f0,float rough){
+  vec3 H=normalize(V+L);float nv=max(dot(N,V),.001),nl=max(dot(N,L),0.),nh=max(dot(N,H),0.);
+  float a=rough*rough,a2=a*a,d=nh*nh*(a2-1.)+1.;float D=a2/max(PI*d*d,.0001);float k=(rough+1.)*(rough+1.)*.125;
+  float G=geometry(nv,k)*geometry(nl,k);return fresnel(max(dot(H,V),0.),f0)*D*G*nl/max(4.*nv*nl,.001);}
+ float softbox(vec3 r,vec3 axis,vec3 up,float width,float height,float edge){
+  vec3 right=normalize(cross(axis,up)),vertical=normalize(cross(right,axis));float forward=dot(r,axis);
+  vec2 p=vec2(dot(r,right),dot(r,vertical))/max(forward,.05);
+  return smoothstep(0.,.15,forward)*(1.-smoothstep(width-edge,width+edge,abs(p.x)))*(1.-smoothstep(height-edge,height+edge,abs(p.y)));}
+ void main(){
+  vec3 N=normalize(vN),V=normalize(vV),R=reflect(-V,N);float nv=max(dot(N,V),0.);
+  vec3 f0=mix(uGold,vec3(.79,.69,.49),.65)*.82;float rough=.29;
+  float key=softbox(R,normalize(vec3(-.65,.8,1.)),vec3(0.,1.,0.),.24,.9,.095);
+  float fill=softbox(R,normalize(vec3(.9,.2,.7)),vec3(0.,1.,0.),.12,.65,.065);
+  float ceiling=softbox(R,normalize(vec3(0.,1.,-.25)),vec3(0.,0.,1.),1.5,.32,.13);
+  vec3 studio=vec3(.012,.016,.023)+vec3(.025,.03,.04)*max(R.y,0.);
+  studio+=vec3(1.5,1.43,1.3)*key+vec3(.65,.78,1.)*fill+vec3(.5,.48,.43)*ceiling;
+  vec3 color=fresnel(nv,f0)*studio;
+  color+=specular(N,V,normalize(vec3(-.65,.8,1.)),f0,rough)*vec3(.65,.6,.5);
+  color+=specular(N,V,normalize(vec3(.9,.2,.7)),f0,rough)*vec3(.12,.16,.22);
+  color+=f0*.008;
+  gl_FragColor=vec4(pow(tone(color*.95),vec3(1./2.2)),1.);}`);
  const program=gl.createProgram();resources.push(['program',program]);gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));gl.useProgram(program);
  const loc={};for(const name of ['aPosition','aNormal'])loc[name]=gl.getAttribLocation(program,name);for(const name of ['uRotation','uView','uScale','uAspect','uGold'])loc[name]=gl.getUniformLocation(program,name);
  function mesh(sphere){const positions=[],normals=[],indices=[],rows=sphere?40:128,cols=sphere?64:28;for(let i=0;i<=rows;i++){const u=i/rows*Math.PI*(sphere?1:2);for(let j=0;j<=cols;j++){const v=j/cols*Math.PI*2;let x,y,z,nx,ny,nz;if(sphere){nx=Math.sin(u)*Math.cos(v);ny=Math.cos(u);nz=Math.sin(u)*Math.sin(v);x=nx;y=ny;z=nz}else{nx=Math.cos(u)*Math.cos(v);ny=Math.sin(v);nz=Math.sin(u)*Math.cos(v);x=(1.86+.14*Math.cos(v))*Math.cos(u);y=.14*Math.sin(v);z=(1.86+.14*Math.cos(v))*Math.sin(u)}positions.push(x,y,z);normals.push(nx,ny,nz)}}for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){const a=i*(cols+1)+j,b=a+cols+1;indices.push(a,b,a+1,b,b+1,a+1)}

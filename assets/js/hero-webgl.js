@@ -13,7 +13,7 @@ function start(){
  vec3 rx(vec3 v,float a){float c=cos(a),s=sin(a);return vec3(v.x,v.y*c-v.z*s,v.y*s+v.z*c);}
  vec3 ry(vec3 v,float a){float c=cos(a),s=sin(a);return vec3(v.x*c+v.z*s,v.y,-v.x*s+v.z*c);}
  vec3 rz(vec3 v,float a){float c=cos(a),s=sin(a);return vec3(v.x*c-v.y*s,v.x*s+v.y*c,v.z);}
- vec3 rot(vec3 v){return rx(rz(ry(rx(v,rotation.x),rotation.y),rotation.z),-.12);}
+ vec3 rot(vec3 v){return rx(ry(rz(ry(rx(v,rotation.x),rotation.y),rotation.z),.55),-.35);}
  void main(){vec3 q=rot(p*scale)+offset;q.z-=8.6;N=rot(n);V=-q;gl_Position=vec4(q.x*2.414/aspect,q.y*2.414,-1.004*q.z-.2004,-q.z);}`);
  const fs=shader(gl.FRAGMENT_SHADER,`precision mediump float;varying mediump vec3 N,V;uniform vec3 metal;
  float box(vec3 r,vec3 a,vec3 up,vec2 size,float blur){vec3 x=normalize(cross(a,up)),y=normalize(cross(x,a));float d=dot(r,a);vec2 q=abs(vec2(dot(r,x),dot(r,y))/max(d,.05));vec2 e=smoothstep(size-vec2(blur),size+vec2(blur),q);return smoothstep(0.,.2,d)*(1.-e.x)*(1.-e.y);}
@@ -38,10 +38,11 @@ function start(){
  function loop(rotation,offset,scale,metal){gl.uniform3fv(u.rotation,rotation);gl.uniform3fv(u.offset,offset);gl.uniform1f(u.scale,scale);gl.uniform3fv(u.metal,metal);gl.drawElements(gl.TRIANGLES,index.length,gl.UNSIGNED_SHORT,0)}
  function draw(now){frame=0;if(dead||!visible||document.hidden)return;const dt=last?Math.min((now-last)/1000,.05):0;last=now;if(active())time+=dt;
  const rect=host.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.75),w=Math.max(1,Math.round(rect.width*dpr)),h=Math.max(1,Math.round(rect.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}gl.viewport(0,0,w,h);gl.uniform1f(u.aspect,w/h);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
- const t=time;
- loop([.35+Math.sin(t*.44)*.28,t*.16,-.2+Math.sin(t*.27)*.15],[-.12,.83+Math.sin(t*.65)*.13,0],.88,[.73,.66,.52]);
- loop([-.3+Math.sin(t*.37+1)*.3,-t*.21+.7,.15+Math.cos(t*.31)*.18],[.16,Math.sin(t*.57+2)*.13,.05],1.,[.66,.69,.73]);
- loop([.5+Math.sin(t*.5+2)*.26,t*.12+1.6,-.25+Math.sin(t*.35+1)*.18],[-.05,-.83+Math.sin(t*.48+4)*.13,0],.82,[.52,.47,.38]);
+ const t=time,halfPi=Math.PI/2;
+ // At t=0 the planes are mutually perpendicular; motion then diverges.
+ loop([Math.sin(t*.44)*.28,t*.16,Math.sin(t*.27)*.15],[-.12,.83+Math.sin(t*.65)*.13,0],.88,[.73,.66,.52]);
+ loop([halfPi+Math.sin(t*.37)*.3,-t*.21,(Math.cos(t*.31)-1.)*.18],[.16,Math.sin(t*.57+2)*.13,.05],1.,[.66,.69,.73]);
+ loop([Math.sin(t*.5)*.26,t*.12,halfPi+Math.sin(t*.35)*.18],[-.05,-.83+Math.sin(t*.48+4)*.13,0],.82,[.52,.47,.38]);
  if(active())queue()}
  const change=()=>{last=0;queue()};
  const resize=new ResizeObserver(change);resize.observe(host);const seen=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;last=0;if(visible)queue();else{cancelAnimationFrame(frame);frame=0}});seen.observe(host);const state=new MutationObserver(change);state.observe(document.body,{attributes:true,attributeFilter:['class']});

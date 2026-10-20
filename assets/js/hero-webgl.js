@@ -8,13 +8,13 @@ function init(){
  const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false,powerPreference:'default'});if(!gl)return;
  const resources=[];
  function shader(type,source){const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){const message=gl.getShaderInfoLog(s);gl.deleteShader(s);throw Error(message)}resources.push(['shader',s]);return s}
- const vs=shader(gl.VERTEX_SHADER,`precision highp float;attribute vec3 aPosition,aNormal;uniform vec3 uRotation;uniform vec2 uView;uniform float uScale,uAspect;varying vec3 vN,vV;
+ const vs=shader(gl.VERTEX_SHADER,`precision highp float;attribute vec3 aPosition,aNormal;uniform vec3 uRotation;uniform vec2 uView;uniform float uScale,uAspect;varying mediump vec3 vN,vV;
  vec3 rx(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(p.x,c*p.y-s*p.z,s*p.y+c*p.z);}
  vec3 ry(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(c*p.x+s*p.z,p.y,-s*p.x+c*p.z);}
  vec3 rz(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(c*p.x-s*p.y,s*p.x+c*p.y,p.z);}
  vec3 rot(vec3 p){p=rz(ry(rx(p,uRotation.x),uRotation.y),uRotation.z);return ry(rx(p,uView.x),uView.y);}
  void main(){vec3 p=rot(aPosition*uScale);vN=rot(aNormal);p.z-=8.;vV=-p;float n=.1,f=50.;gl_Position=vec4(p.x*2.41421356/uAspect,p.y*2.41421356,(-(f+n)*p.z-2.*f*n)/(f-n),-p.z);}`);
- const fs=shader(gl.FRAGMENT_SHADER,`precision mediump float;varying vec3 vN,vV;uniform vec3 uGold;
+ const fs=shader(gl.FRAGMENT_SHADER,`precision mediump float;varying mediump vec3 vN,vV;uniform vec3 uGold;
  vec3 tone(vec3 c){return clamp((c*(2.51*c+.03))/(c*(2.43*c+.59)+.14),0.,1.);}
  void main(){vec3 N=normalize(vN),V=normalize(vV),R=reflect(-V,N);float nv=max(dot(N,V),0.);vec3 F=uGold+(1.-uGold)*pow(1.-nv,5.);
  float strip1=pow(max(0.,dot(R,normalize(vec3(-.5,1.,1.)))),35.);float strip2=pow(max(0.,dot(R,normalize(vec3(1.,.2,.8)))),65.);

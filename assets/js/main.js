@@ -14,3 +14,4 @@ toggle.addEventListener('click',()=>{brief.hidden=!brief.hidden;toggle.setAttrib
 find('#download').addEventListener('click',()=>{const text=find('#project').value.trim(),status=find('#status');if(!text){status.textContent='Vul eerst je projectbrief in.';return}const url=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='forma-projectbrief.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='Download aangevraagd. Er is niets verstuurd.'});
 find('#year').textContent=new Date().getFullYear();
 import('./hero-webgl.js').catch(error=>console.warn('WebGL-hero niet geladen; CSS-versie blijft beschikbaar.',error));
+import('./design-studio.js').catch(error=>console.warn('Ontwerpstudio niet geladen; basiswebsite blijft beschikbaar.',error));

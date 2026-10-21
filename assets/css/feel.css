@@ -1,0 +1,23 @@
+/* Tactile enhancement: layout and content remain unchanged. */
+.feel-progress{position:fixed;inset:0 auto auto 0;width:100%;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;pointer-events:none;z-index:21}
+.feel-ready .button{position:relative;overflow:hidden;isolation:isolate;transition:background .25s,transform .45s cubic-bezier(.2,.75,.25,1)}
+.feel-ready .button:before{content:'';position:absolute;inset:-80% auto -80% -70%;width:45%;background:linear-gradient(90deg,transparent,#fff5,transparent);transform:skewX(-22deg);pointer-events:none;transition:left .7s cubic-bezier(.2,.75,.25,1)}
+.feel-ready .faq summary{list-style:none;margin-left:0;padding:4px 36px 4px 0;position:relative}
+.feel-ready .faq summary::-webkit-details-marker{display:none}
+.feel-ready .faq summary:after{content:'+';position:absolute;right:4px;top:0;font-size:24px;color:var(--accent);transition:transform .35s}
+.feel-ready .faq details[open]>summary:after{transform:rotate(45deg)}
+@media(hover:hover) and (pointer:fine){
+.feel-ready:not(.paused) .button:hover{transform:translate3d(var(--feel-mx,0px),calc(var(--feel-my,0px) - 2px),0)}
+.feel-ready:not(.paused) .button:hover:before{left:135%}
+.feel-ready .preview{position:relative}
+.feel-ready .preview:after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(380px circle at var(--feel-x,50%) var(--feel-y,50%),#fff3,transparent 70%);opacity:0;transition:opacity .5s}
+.feel-ready:not(.paused) .preview:hover:after{opacity:1}
+.feel-ready:not(.paused) .preview:hover .browser{transform:perspective(1000px) rotateX(var(--feel-rx,0deg)) rotateY(var(--feel-ry,0deg)) rotateZ(0deg) translateY(-5px);transition:transform .5s cubic-bezier(.2,.75,.25,1)}
+.feel-ready .service h3{transition:transform .4s cubic-bezier(.2,.75,.25,1)}
+.feel-ready:not(.paused) .service:hover h3{transform:translateX(6px)}
+.feel-ready .steps article:before{transition:width .5s cubic-bezier(.2,.75,.25,1)}
+.feel-ready:not(.paused) .steps article:hover:before{width:72px}
+}
+.feel-ready.paused .button,.feel-ready.paused .button:before,.feel-ready.paused .preview .browser,.feel-ready.paused .faq summary:after{transition:none;transform:none}
+.feel-ready.paused .preview:after{opacity:0}
+@media(prefers-reduced-motion:reduce){.feel-ready .button,.feel-ready .button:before,.feel-ready .preview .browser,.feel-ready .faq summary:after,.feel-ready .service h3{transition:none!important;transform:none!important}.feel-ready .button:before,.feel-ready .preview:after{display:none}.feel-ready .steps article:before{transition:none!important}}

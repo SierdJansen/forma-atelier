@@ -11,6 +11,7 @@ export const pages=[
 ['step-discover','Werkwijze — ontdekken','.steps article:nth-child(1) h3','.steps article:nth-child(1) small','.steps article:nth-child(1) p'],
 ['step-design','Werkwijze — ontwerpen','.steps article:nth-child(2) h3','.steps article:nth-child(2) small','.steps article:nth-child(2) p'],
 ['step-build','Werkwijze — bouwen','.steps article:nth-child(3) h3','.steps article:nth-child(3) small','.steps article:nth-child(3) p'],
+['about','Homepage — achter Forma Atelier','#about h2','#about>.eyebrow','#about .about-copy'],
 ['contact','Contact — uitnodiging','#contact h2','#contact>.eyebrow','#contact>p:not(.eyebrow)'],
 ['faq-price','Veelgestelde vragen — kosten','.faq details:nth-of-type(1) summary','','.faq details:nth-of-type(1) p'],
 ['faq-time','Veelgestelde vragen — planning','.faq details:nth-of-type(2) summary','','.faq details:nth-of-type(2) p'],

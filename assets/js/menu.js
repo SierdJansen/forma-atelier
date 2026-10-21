@@ -9,14 +9,14 @@ var items=[
 {label:'Expertise',href:prefix+'#expertise',note:'Wat ik doe'},
 {label:'Aanpak',href:prefix+'#proces',note:'Hoe we samenwerken'},
 {label:'Lab',href:page==='lab'?'#main':'./lab.html',note:'Zelf proberen',current:page==='lab'},
-{label:'Contact',href:prefix+'#contact',note:'Laten we praten'}];
+{label:'Contact',href:page==='contact'?'#main':'./contact.html',note:'Laten we praten',current:page==='contact'}];
 function el(tag,cls,text){var n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
 function burger(cross){var b=el('span','fm-burger'+(cross?' is-x':''));b.setAttribute('aria-hidden','true');b.appendChild(el('i'));b.appendChild(el('i'));return b}
 var overlay=el('div','fm-overlay');overlay.id='fm-menu';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Hoofdmenu');overlay.setAttribute('inert','');
 var rings=el('div','fm-rings');rings.setAttribute('aria-hidden','true');rings.appendChild(el('i'));rings.appendChild(el('i'));rings.appendChild(el('i'));rings.appendChild(el('b'));
 var closeButton=el('button','fm-close');closeButton.type='button';closeButton.setAttribute('aria-label','Menu sluiten');closeButton.appendChild(burger(true));closeButton.appendChild(el('span','fm-label','Sluit'));
 var nav=el('nav','fm-main');nav.setAttribute('aria-label','Hoofdnavigatie');var list=el('ol','fm-list');
-items.forEach(function(item,index){var li=el('li','fm-item');li.style.setProperty('--i',String(index));var a=el('a','fm-link');a.href=item.href;if(item.current)a.setAttribute('aria-current','page');var num=el('span','fm-num',(index<9?'0':'')+(index+1));num.setAttribute('aria-hidden','true');var arrow=el('span','fm-arrow','↗');arrow.setAttribute('aria-hidden','true');a.appendChild(num);a.appendChild(el('span','fm-text',item.label));a.appendChild(el('span','fm-note',item.note));a.appendChild(arrow);li.appendChild(a);list.appendChild(li)});
+items.forEach(function(item,index){var li=el('li','fm-item');li.style.setProperty('--i',String(index));var a=el('a','fm-link');a.href=item.href;if(item.current)a.setAttribute('aria-current','page');var num=el('span','fm-num',(index<9?'0':'')+(index+1));num.setAttribute('aria-hidden','true');a.appendChild(num);a.appendChild(el('span','fm-text',item.label));a.appendChild(el('span','fm-note',item.note));li.appendChild(a);list.appendChild(li)});
 nav.appendChild(list);
 overlay.appendChild(rings);overlay.appendChild(closeButton);overlay.appendChild(nav);overlay.appendChild(el('p','fm-foot','Onafhankelijk. Doordacht. Op maat.'));
 body.appendChild(overlay);

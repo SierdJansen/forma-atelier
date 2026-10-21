@@ -1,0 +1,18 @@
+/* Homepage composition; existing content and motion controls are preserved. */
+body[data-page="home"] .hero{min-height:min(820px,calc(100svh - 88px));grid-template-columns:1.05fr 1fr;gap:clamp(24px,4vw,64px);padding-top:clamp(40px,6vh,72px);padding-bottom:100px}
+body[data-page="home"] .hero:before{inset:5% -3% 0 -3%;background:radial-gradient(ellipse at 57% 46%,#b99c6214,transparent 65%)}
+body[data-page="home"] .hero h1{font-size:clamp(58px,7.2vw,104px);line-height:1.045;letter-spacing:-.055em}
+body[data-page="home"] .hero .lead{max-width:365px;font-size:16px;line-height:1.85;margin-top:26px;margin-bottom:30px}
+body[data-page="home"] .hero .actions{gap:26px;font-size:13px}
+body[data-page="home"] .hero .actions .button{font-size:13px;padding:18px 25px;min-height:54px}
+body[data-page="home"] .sculpture{height:clamp(460px,50vw,600px);border-color:#dcc6970e;background:radial-gradient(ellipse at 50% 51%,#b79b5726,transparent 57%);box-shadow:none}
+body[data-page="home"] .sculpture:before{opacity:0}
+body[data-page="home"] .sculpture>.webgl-canvas{transform:scale(1.12);transform-origin:center}
+body[data-page="home"] .sculpture>.spin{scale:1.12}
+body[data-page="home"] .hero-bottom{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;bottom:24px}
+body[data-page="home"] .hero-bottom>span{grid-column:1}
+body[data-page="home"] .hero-bottom #motion{grid-column:3;justify-self:end}
+.hero-explore{grid-column:2;display:inline-flex;align-items:center;gap:12px;min-height:44px;font-size:11px;letter-spacing:.05em;color:var(--accent);white-space:nowrap}
+.hero-explore span{font-size:18px;line-height:1}
+@media(max-width:900px){body[data-page="home"] .hero{grid-template-columns:1fr;min-height:0;padding-top:44px;padding-bottom:95px;gap:22px}body[data-page="home"] .hero h1{font-size:clamp(48px,8.8vw,78px);line-height:1.055}body[data-page="home"] .hero .lead{font-size:14px;max-width:440px}body[data-page="home"] .sculpture{height:clamp(310px,65vw,440px);width:min(100%,520px)}body[data-page="home"] .sculpture>.webgl-canvas{transform:scale(1.08)}body[data-page="home"] .sculpture>.spin{scale:1.06}body[data-page="home"] .hero .actions{gap:20px}body[data-page="home"] .hero .actions .button{padding:15px 20px;min-height:48px}}
+@media(max-width:600px){body[data-page="home"] .hero-bottom{grid-template-columns:1fr auto;gap:12px}body[data-page="home"] .hero-bottom>span{display:none}.hero-explore{grid-column:1}body[data-page="home"] .hero-bottom #motion{grid-column:2}body[data-page="home"] .hero .actions{font-size:12px}body[data-page="home"] .hero .actions .button{font-size:12px}}

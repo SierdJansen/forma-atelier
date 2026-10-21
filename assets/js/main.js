@@ -7,3 +7,4 @@ motion.addEventListener('click',()=>{const paused=document.body.classList.toggle
 find('#year').textContent=new Date().getFullYear();
 import('./hero-webgl.js').catch(error=>console.warn('WebGL-hero niet geladen; CSS-versie blijft beschikbaar.',error));
 if(document.body.dataset.page==='home')import('./feel.js?v=tactile1').catch(()=>console.warn('Extra interacties niet geladen; de website blijft beschikbaar.'));
+if(document.body.dataset.page==='home')import('./hero-composition.js?v=composition1').catch(()=>console.warn('Compositie niet geladen; de bestaande vormgeving blijft beschikbaar.'));

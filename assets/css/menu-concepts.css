@@ -6,3 +6,6 @@
 @media(max-width:900px){.fm-subtoggle{top:10px}.fm-sublist{position:relative;left:auto;top:auto;width:auto;margin:12px 0 14px 36px;transform:translateY(-4px)}.fm-sublist:before{display:none}.is-sub-open>.fm-sublist{transform:none}.fm-subtitle{font-size:26px}}
 @media(max-width:480px){.fm-sublist{margin-left:16px;padding-left:18px}.fm-sublink{min-height:88px}.fm-subtitle{font-size:25px}}
 @media(prefers-reduced-motion:reduce){.fm-sublist,.fm-sublink,.fm-stage{transition:none}.fm-sublist{transform:none}}
+.fm-subtitle{transition:transform .22s ease-out,color .22s}.fm-subdesc{transition:color .22s}.fm-sublink:focus-visible{color:#f4f0e7;border-bottom-color:#d8c39c90}.fm-sublink:focus-visible .fm-subtitle{transform:translateX(2px)}.fm-sublink:focus-visible .fm-subdesc{color:#d5d1c5}
+@media(hover:hover) and (pointer:fine){.fm-sublink:hover{color:#f4f0e7;border-bottom-color:#d8c39c90}.fm-sublink:hover .fm-subtitle{transform:translateX(2px)}.fm-sublink:hover .fm-subdesc{color:#d5d1c5}}
+@media(prefers-reduced-motion:reduce){.fm-subtitle,.fm-subdesc{transition:none}.fm-sublink:hover .fm-subtitle,.fm-sublink:focus-visible .fm-subtitle{transform:none}}

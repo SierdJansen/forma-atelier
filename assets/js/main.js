@@ -1,11 +1,6 @@
 'use strict';
 document.documentElement.classList.add('js');
-const find=s=>document.querySelector(s),menu=find('#menu'),links=find('#links');
-menu.hidden=false;
-function closeMenu(){links.classList.remove('open');menu.setAttribute('aria-expanded','false')}
-menu.addEventListener('click',()=>{const open=links.classList.toggle('open');menu.setAttribute('aria-expanded',String(open))});
-links.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&links.classList.contains('open')){closeMenu();menu.focus()}});
+const find=s=>document.querySelector(s);
 const reduced=matchMedia('(prefers-reduced-motion: reduce)'),motion=find('#motion');
 function preference(){motion.hidden=reduced.matches}preference();reduced.addEventListener('change',preference);
 motion.addEventListener('click',()=>{const paused=document.body.classList.toggle('paused');motion.setAttribute('aria-pressed',String(paused));motion.textContent=paused?'Animatie hervatten':'Animatie pauzeren'});
